@@ -1,0 +1,16 @@
+{
+    "os": "Linux-5.13.0-40-generic-x86_64-with-glibc2.29",
+    "python": "3.8.10",
+    "heartbeatAt": "2022-05-05T13:19:49.848239",
+    "startedAt": "2022-05-05T13:19:46.565572",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/mikey/PycharmProjects/Tensorflow_custom_barebone/mains/main_mnist.py",
+    "codePath": "main_mnist.py",
+    "host": "mikey-ThinkPad-X240",
+    "username": "mikey",
+    "executable": "/home/mikey/PycharmProjects/Tensorflow_custom_barebone/venv/bin/python"
+}

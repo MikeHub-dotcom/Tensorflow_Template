@@ -1,0 +1,16 @@
+{
+    "os": "Linux-5.13.0-40-generic-x86_64-with-glibc2.29",
+    "python": "3.8.10",
+    "heartbeatAt": "2022-05-02T10:19:50.125869",
+    "startedAt": "2022-05-02T10:19:47.112655",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/home/mikey/PycharmProjects/Tensorflow_custom_barebone/mains/main.py",
+    "codePath": "main.py",
+    "host": "mikey-ThinkPad-X240",
+    "username": "mikey",
+    "executable": "/home/mikey/PycharmProjects/Tensorflow_custom_barebone/venv/bin/python"
+}
