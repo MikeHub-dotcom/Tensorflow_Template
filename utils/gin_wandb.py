@@ -76,7 +76,7 @@ def get_opt(opt_name):
 
 def select_run_names():
     """
-    Lets the user choose run-name, group-name and tag for a run
+    Let the user choose run-name, group-name and tag for a run
     :return: the variables including the user's input for the respective value
     """
     run_name = input("Specify the name of the run: ")
