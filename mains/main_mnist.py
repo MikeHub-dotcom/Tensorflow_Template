@@ -1,6 +1,7 @@
 import gin
 import logging
 import wandb
+import tensorflow as tf
 from absl import app, flags
 from utils import dirs, gin_wandb, logger
 from data_loader import mnist_loader
@@ -13,12 +14,9 @@ flags.DEFINE_boolean('train', True, 'Specify whether to train or evaluate a mode
 
 
 def main(argv, development=True):
-    # ToDo: Add wandb.init(...) to the evaluation script
+
     # User input to name the run
-    if development:
-        run_name, tag, group_name = '', ['dev'], 'dev'
-    else:
-        run_name, tag, group_name = utils.gin_wandb.select_run_names()
+    run_name, tag, group_name = utils.gin_wandb.select_run_names(development)
 
     # Generate folder structures
     run_paths = utils.dirs.gen_run_folder(run_name)
@@ -40,13 +38,14 @@ def main(argv, development=True):
     train, test = mnist_loader.load_mnist()
 
     # Load model
-    model = MnistModel((28, 28))
+    model = MnistModel()
+    # ToDo: Check if a custom written train function can be applied to such a model
 
     # Perform training and evaluation
-    # ...
+    #if FLAGS.train:
 
     # Perform evaluation only
-    # ...
+    # else:
 
     # Close WandB run
     #wandb.finish()

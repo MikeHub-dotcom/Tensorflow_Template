@@ -1,24 +1,45 @@
-from base.base_model import BaseModel
 import tensorflow as tf
 
+# Will I need to call save() on it? If so, go with Model
+# ToDo: One config file for one model architecture
+# ToDo: Give input shape through the config gin
+# ToDo: Pass config parameter in a compact format (a second gin or something like that)
+#  -> Gin with the same name as the model
+#   Save model and best checkpoint after successful training
 
-class MnistModel():
-    def __init__(self, input_shape):
-        # ToDo: Inheritance to super class
-        # ToDo: Give input shape through the config gin
-        # ToDo: Pass config parameter in a compact format (a second gin or something like that)
-        #  -> Gin with the same name as the model
+'''
+Pass config parameters, maybe in a compact and flexible format
+Initiate counters (steps, epochs) (maybe do that within the train function)
 
-        self.input_shape = input_shape
-        self.build_model()
+-> Checkpoints or saved models wanted?!
+Function for saving checkpoints
+Function for loading checkpoints
+
+Using model subclassing after: https://pyimagesearch.com/2019/10/28/3-ways-to-create-a-keras-model-with-tensorflow-2-0-sequential-functional-and-model-subclassing/
+https://towardsdatascience.com/model-sub-classing-and-custom-training-loop-from-scratch-in-tensorflow-2-cc1d4f10fb4e
+'''
 
 
-    def build_model(self):
-        # here you build the tensorflow graph of any model you want and also define the loss.
-        input = tf.keras.Input(self.input_shape)
-        out = tf.keras.layers.Flatten(input_shape=(28, 28))(input)
-        out = tf.keras.layers.Dense(128, activation='relu')(out)
-        out = tf.keras.layers.Dropout(0.2)(out)
-        out = tf.keras.layers.Dense(10, activation='softmax')(out)
+class MnistModel(tf.keras.Model):
+    """Using Keras model subclassing to create own models"""
+    def __init__(self):
+        super(MnistModel, self).__init__()
 
-        return tf.keras.Model(inputs=input, outputs=out, name='mnist_test')
+        self.flatten1 = tf.keras.layers.Flatten(input_shape=(28, 28))
+        self.dense1 = tf.keras.layers.Dense(128, activation='relu')
+        self.dropout1 = tf.keras.layers.Dropout(0.2)
+        self.dense2 = tf.keras.layers.Dense(10, activation='softmax')
+
+    def __call__(self, inputs, training=True):
+        """
+        Calls the model on new inputs and returns the outputs as tensors.
+        :param inputs: input data tensors (the training/test data)
+        :param training: Switch behavior of some layers (e.g. dropout) between training and inference
+        :return: output tensor
+        """
+        out = self.flatten1(inputs)
+        out = self.dense1(out)
+        out = self.dropout1(out)
+        out = self.dense2(out)
+        return out
+

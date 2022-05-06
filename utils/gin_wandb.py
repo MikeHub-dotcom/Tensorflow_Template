@@ -74,26 +74,33 @@ def get_opt(opt_name):
         exit()
 
 
-def select_run_names():
+def select_run_names(development):
     """
     Let the user choose run-name, group-name and tag for a run
+    :param: development: option to disable the naming performed by the user and set group and tag to 'dev'
     :return: the variables including the user's input for the respective value
     """
-    run_name = input("Specify the name of the run: ")
-    group_name = input("Specify the group of the run: ")
-    tag_choice = input("Select a tag: (1) - test, (2) - experimental, (3) - serious: ")
-    tag = []
+    if development:
+        run_name, tag, group_name = '', ['dev'], 'dev'
 
-    if tag_choice == '1':
-        tag.append('Test')
+        return run_name, tag, group_name
 
-    elif tag_choice == '2':
-        tag.append('Experimental')
+    else:
+        run_name = input("Specify the name of the run: ")
+        group_name = input("Specify the group of the run: ")
+        tag_choice = input("Select a tag: (1) - test, (2) - experimental, (3) - serious: ")
+        tag = []
 
-    elif tag_choice == '3':
-        tag.append('Serious')
+        if tag_choice == '1':
+            tag.append('Test')
 
-    elif tag_choice == '':
-        print("No tag selected, continuing...")
+        elif tag_choice == '2':
+            tag.append('Experimental')
 
-    return run_name, tag, group_name
+        elif tag_choice == '3':
+            tag.append('Serious')
+
+        elif tag_choice == '':
+            print("No tag selected, continuing...")
+
+        return run_name, tag, group_name

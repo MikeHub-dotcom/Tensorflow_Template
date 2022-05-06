@@ -13,10 +13,7 @@ flags.DEFINE_boolean('train', True, 'Specify whether to train or evaluate a mode
 def main(argv, development=True):
     # ToDo: Add wandb.init(...) to the evaluation script
     # User input to name the run
-    if development:
-        run_name, tag, group_name = '', ['dev'], 'dev'
-    else:
-        run_name, tag, group_name = utils.gin_wandb.select_run_names()
+    run_name, tag, group_name = utils.gin_wandb.select_run_names(development)
 
     # Generate folder structures
     run_paths = utils.dirs.gen_run_folder(run_name)
