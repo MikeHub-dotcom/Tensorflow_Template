@@ -45,7 +45,7 @@ def main(argv, development=True):
     # Perform training and evaluation
     if FLAGS.train:
         model.compile(loss=tf.losses.SparseCategoricalCrossentropy(from_logits=False),
-                      optimizer=tf.optimizers.SGD(),
+                      optimizer=tf.optimizers.Adam(),
                       metrics=[tf.keras.metrics.CategoricalAccuracy(name='accuracy')])
 
         model.fit(ds_train, validation_data=ds_val, epochs=1000)
