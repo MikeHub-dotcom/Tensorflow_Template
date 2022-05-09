@@ -36,13 +36,19 @@ def main(argv, development=True):
 
     # Setup pipeline
     train, test = mnist_loader.load_mnist()
+    (ds_train, ds_val), ds_info = mnist_loader.load_mnist_tfds()
 
     # Load model
     model = MnistModel()
     # ToDo: Check if a custom written train function can be applied to such a model
 
     # Perform training and evaluation
-    #if FLAGS.train:
+    if FLAGS.train:
+        model.compile(loss=tf.losses.SparseCategoricalCrossentropy(from_logits=False),
+                      optimizer=tf.optimizers.SGD(),
+                      metrics=[tf.keras.metrics.CategoricalAccuracy(name='accuracy')])
+
+        model.fit(ds_train, validation_data=ds_val, epochs=1000)
 
     # Perform evaluation only
     # else:

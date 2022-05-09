@@ -26,11 +26,11 @@ class MnistModel(tf.keras.Model):
         super(MnistModel, self).__init__()
 
         self.flatten1 = tf.keras.layers.Flatten(input_shape=(28, 28))
-        self.dense1 = tf.keras.layers.Dense(128, activation='relu')
+        self.dense1 = tf.keras.layers.Dense(512, activation='relu')
         self.dropout1 = tf.keras.layers.Dropout(0.2)
         self.dense2 = tf.keras.layers.Dense(10, activation='softmax')
 
-    def __call__(self, inputs, training=True):
+    def call(self, inputs, training=False):
         """
         Calls the model on new inputs and returns the outputs as tensors.
         :param inputs: input data tensors (the training/test data)
@@ -39,7 +39,7 @@ class MnistModel(tf.keras.Model):
         """
         out = self.flatten1(inputs)
         out = self.dense1(out)
-        out = self.dropout1(out)
+        out = self.dropout1(out, training=training)
         out = self.dense2(out)
         return out
 
