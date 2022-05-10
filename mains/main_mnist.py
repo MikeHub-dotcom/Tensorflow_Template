@@ -35,7 +35,6 @@ def main(argv, development=True):
                group=group_name, tags=tag)'''
 
     # Setup pipeline
-    train, test = mnist_loader.load_mnist()
     (ds_train, ds_val), ds_info = mnist_loader.load_mnist_tfds()
 
     # Load model
@@ -43,15 +42,22 @@ def main(argv, development=True):
     # ToDo: Check if a custom written train function can be applied to such a model
 
     # Perform training and evaluation
+    # ToDo: Choose metrics according to the labeling of the dataset (e.g. Accuracy, SparseCategoricalAccuracy, BinaryAccuracy, ...)
+    # ToDo: Wrap compiling and training into a standalone function
+    # ToDo: Save checkpoints and the model at the best point
     if FLAGS.train:
-        model.compile(loss=tf.losses.SparseCategoricalCrossentropy(from_logits=False),
+        model.compile(loss=tf.losses.SparseCategoricalCrossentropy(),
                       optimizer=tf.optimizers.Adam(),
-                      metrics=[tf.keras.metrics.CategoricalAccuracy(name='accuracy')])
+                      metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 
-        model.fit(ds_train, validation_data=ds_val, epochs=1000)
+        model.fit(ds_train, validation_data=ds_val, epochs=5)
+        print("Evaluating:")
+        model.evaluate(ds_val, verbose=2)
 
     # Perform evaluation only
-    # else:
+    else:
+        # ToDo: Load model first
+        model.evaluate(ds_val, verbose=2)
 
     # Close WandB run
     #wandb.finish()

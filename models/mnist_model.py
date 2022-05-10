@@ -30,7 +30,10 @@ class MnistModel(tf.keras.Model):
         self.dropout1 = tf.keras.layers.Dropout(0.2)
         self.dense2 = tf.keras.layers.Dense(10, activation='softmax')
 
-    def call(self, inputs, training=False):
+        self.loss_tracker = tf.keras.metrics.Mean(name="loss")
+        self.mae_metric = tf.keras.metrics.MeanAbsoluteError(name="mae")
+
+    def __call__(self, inputs, training=False):
         """
         Calls the model on new inputs and returns the outputs as tensors.
         :param inputs: input data tensors (the training/test data)
@@ -42,4 +45,56 @@ class MnistModel(tf.keras.Model):
         out = self.dropout1(out, training=training)
         out = self.dense2(out)
         return out
+
+    # ToDo: Write own training and evaluation routine
+    '''def train_step(self, data):
+        # Unpack the data. Its structure depends on your model and
+        # on what you pass to `fit()`.
+        x, y = data
+
+        with tf.GradientTape() as tape:
+            y_pred = self(x, training=True)  # Forward pass
+            # Compute the loss value
+            # (the loss function is configured in `compile()`)
+            loss = self.compiled_loss(y, y_pred, regularization_losses=self.losses)
+
+        # Compute gradients
+        trainable_vars = self.trainable_variables
+        gradients = tape.gradient(loss, trainable_vars)
+        # Update weights
+        self.optimizer.apply_gradients(zip(gradients, trainable_vars))
+        # Update metrics (includes the metric that tracks the loss)
+        self.compiled_metrics.update_state(y, y_pred)
+        # Return a dict mapping metric names to current value
+        return {m.name: m.result() for m in self.metrics}'''
+
+    def train_step(self, data):
+        x, y = data
+
+        with tf.GradientTape() as tape:
+            y_pred = self(x, training=True)  # Forward pass
+            # Compute our own loss
+            self.loss = tf.keras.losses.SparseCategoricalCrossentropy()
+            loss = self.loss(y, y_pred)
+
+        # Compute gradients
+        trainable_vars = self.trainable_variables
+        gradients = tape.gradient(loss, trainable_vars)
+
+        # Update weights
+        self.optimizer.apply_gradients(zip(gradients, trainable_vars))
+
+        # Compute our own metrics
+        self.loss_tracker.update_state(loss)
+        self.mae_metric.update_state(y, y_pred)
+        return {"loss": self.loss_tracker.result(), "mae": self.mae_metric.result()}
+
+    @property
+    def metrics(self):
+        # We list our `Metric` objects here so that `reset_states()` can be
+        # called automatically at the start of each epoch
+        # or at the start of `evaluate()`.
+        # If you don't implement this property, you have to call
+        # `reset_states()` yourself at the time of your choosing.
+        return [self.loss_tracker, self.mae_metric]
 
