@@ -30,8 +30,8 @@ class MnistModel(tf.keras.Model):
         self.dropout1 = tf.keras.layers.Dropout(0.2)
         self.dense2 = tf.keras.layers.Dense(10, activation='softmax')
 
-        self.loss_tracker = tf.keras.metrics.Mean(name="loss")
-        self.mae_metric = tf.keras.metrics.MeanAbsoluteError(name="mae")
+        #self.loss_tracker = tf.keras.metrics.Mean(name="loss")
+        #self.mae_metric = tf.keras.metrics.MeanAbsoluteError(name="mae")
 
     def __call__(self, inputs, training=False):
         """
@@ -47,7 +47,7 @@ class MnistModel(tf.keras.Model):
         return out
 
     # ToDo: Write own training and evaluation routine
-    '''def train_step(self, data):
+    def train_step(self, data):
         # Unpack the data. Its structure depends on your model and
         # on what you pass to `fit()`.
         x, y = data
@@ -66,16 +66,17 @@ class MnistModel(tf.keras.Model):
         # Update metrics (includes the metric that tracks the loss)
         self.compiled_metrics.update_state(y, y_pred)
         # Return a dict mapping metric names to current value
-        return {m.name: m.result() for m in self.metrics}'''
+        return {m.name: m.result() for m in self.metrics}
 
-    def train_step(self, data):
+    '''def train_step(self, data):
         x, y = data
 
         with tf.GradientTape() as tape:
             y_pred = self(x, training=True)  # Forward pass
             # Compute our own loss
-            self.loss = tf.keras.losses.SparseCategoricalCrossentropy()
-            loss = self.loss(y, y_pred)
+            #self.loss = tf.keras.losses.SparseCategoricalCrossentropy()
+            # ToDo: Ask on stackoverflow regarding this problem
+            loss = tf.keras.losses.SparseCategoricalCrossentropy(y, y_pred)
 
         # Compute gradients
         trainable_vars = self.trainable_variables
@@ -96,5 +97,5 @@ class MnistModel(tf.keras.Model):
         # or at the start of `evaluate()`.
         # If you don't implement this property, you have to call
         # `reset_states()` yourself at the time of your choosing.
-        return [self.loss_tracker, self.mae_metric]
+        return [self.loss_tracker, self.mae_metric]'''
 

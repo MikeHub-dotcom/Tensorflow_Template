@@ -7,6 +7,8 @@ from utils import dirs, gin_wandb, logger
 from data_loader import mnist_loader
 from models.mnist_model import MnistModel
 
+# ToDo: Include WandB callbacks in suitable places (training, etc.)
+
 import utils.dirs
 
 FLAGS = flags.FLAGS
