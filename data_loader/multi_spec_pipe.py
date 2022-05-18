@@ -36,6 +36,8 @@ class MultispectralDataset:
         # ToDo: Don't forget to process the label layer (e.g. layer 11)
         # ToDo: Export parts of this function to new functions to shrink the size of this function
         # ToDo: Enumerate every slice with a number to track its relative position
+        # ToDo: Output is a 4D tensor
+        # ToDo: Also a suitable idea: define centroids for each small patch and take patches of different size
 
         all_channels_sliceable = self.prepare_slicing(all_channels_raw, slice_size)
         shape = all_channels_sliceable.shape
@@ -49,7 +51,7 @@ class MultispectralDataset:
     def prepare_slicing(self, all_channels_raw, slice_size):
         """
         Prepares the channel array for slicing and therefore compensates the slice size surplus by adding more
-        non-data values
+        "non-data" values
         :param all_channels_raw: Uncompensated channel array
         :param slice_size: Defines the size of the slicing kernel
         :return: all_channels_sliceable: Channel array ready for slicing
